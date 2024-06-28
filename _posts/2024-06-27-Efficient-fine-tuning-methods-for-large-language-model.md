@@ -1,8 +1,12 @@
 ## Efficient fine-tuning methods for large language model
 
-Author: Letian Shi, Keyan Shi
-
 ---
+layout: post
+title: "Efficient fine-tuning methods for large language model"
+author: "Letian Shi, Keyan Shi"
+---
+
+Below is the content.
 
 ### This is a header
 
