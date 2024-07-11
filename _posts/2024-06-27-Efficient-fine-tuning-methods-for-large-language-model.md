@@ -57,7 +57,7 @@ We can see a big drop of performance in some of the modification cases, while wi
 
 ![](/images/comp.png)
 
-So basically \([P_i]\) is the continuous prompt embedding that needs to be learned, and \(h_i\) is the input to be fed to the model. The prompt encoder that maps \([P_i]\) to \(h_i\) can be anything, while they experimented the popular choices with LSTM giving the best performance.
+So basically \\([P_i]\\) is the continuous prompt embedding that needs to be learned, and \\(h_i\\) is the input to be fed to the model. The prompt encoder that maps \\([P_i]\\) to \\(h_i\\) can be anything, while they experimented the popular choices with LSTM giving the best performance.
 
 #### P-tuning v2 (Liu et al., 2022)
 
