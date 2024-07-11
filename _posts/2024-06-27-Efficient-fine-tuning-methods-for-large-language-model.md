@@ -10,6 +10,10 @@ Below is the content.
 
 ## Additive
 
+### Adpater tuning
+
+#### 1. Parameter-Efficient Transfer Learning for NLP
+
 ### Prompt engineering
 
 Prompts are typically used as means to interact with LLMs, where users provide to which the model is to respond. A prompt can be texts, images, videos, etc. in different use cases. Prompt engineering, in turn, refers to the process of designing the prompts for target outputs. For example, we can ask:
@@ -29,6 +33,10 @@ _A: <mark>Berlin.</mark>_
 Hence, the _few-shot_ prompt enables the model to learn without parameter tuning. However, one can already spot some shortcomings of prompt engineering in the process - a few examples must be pre-appended, affecting the token budget.
 
 One may suggest working with transfer learning to resolve the limitations, while fine-tuning the entire model (BERT-base 110-345M, BERT-large 340-770M, GPT-3 175B paratemers) requires considerable computational resources, and it has a typical trade-off with model performance.
+
+#### 2. Prefix-tuning 
+
+#### 3. Prompt tuning
 
 #### P-tuning (Liu et al., 2023)
 
@@ -80,4 +88,8 @@ Considering the update $\Delta w_i \in \Delta w$ ($\in \Delta W$) for the $i$ th
 where $B\in \mathbb{R}^{d\times r}$, $A\in \mathbb{R}^{r\times d}$ with rank $r \ll d$. Under this decomposition the computation reduces significantly from $d\times d$ to $d\times r+r\times d$. The following graph illustrates the process and the respective initialization of matrices $B$ and $A$.
 
 ![](./lora.png)
+
+## Efficient optimization method
+
+
 
