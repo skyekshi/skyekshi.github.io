@@ -78,7 +78,7 @@ Then by design P-tuning v2 has more tunable task-specific parameters and more di
 
 ## Reparamatrization
 
-Another approach to reduce compute resource consumption is to simplify the tuning process through reparamatrization. To be specific, if we view the fine-tuning problem as minimizing the target loss function \\(L(X,y;W+\Delta W)\\) where \\(X\\) and \\(y\\) are the data, and $W$ the pre-trained model parameters, the tuning parameters \\(\Delta W\\) could be approximated.
+Another approach to reduce compute resource consumption is to simplify the tuning process through reparamatrization. To be specific, if we view the fine-tuning problem as minimizing the target loss function \\(L(X,y;W+\Delta W)\\) where \\(X\\) and \\(y\\) are the data, and \\(W\\) the pre-trained model parameters, the tuning parameters \\(\Delta W\\) could be approximated.
 
 #### LoRA (Hu et al., 2021)
 LoRA, or _Low-Rank Adaptation_, by its name uses low rank approximation \\(\Delta\Phi \approx \Delta W\\) with \\(|\Delta\Phi| \ll |\Delta W|\\). The observation is that neural nets have many dense layers performing matrix multiplication, and while they typically have full-rank during pre-training, when adapting to a specific task the weight updates will have a low “intrinsic dimension”.
