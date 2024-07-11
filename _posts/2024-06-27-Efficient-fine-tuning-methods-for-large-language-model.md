@@ -89,7 +89,7 @@ Considering the update \\(\Delta w_i \in \Delta w\\) (\\(\in \Delta W\\)) for th
 $$ 
 \Delta w_i \approx  \Delta\phi_i = BA
 $$
-</center><br>
+</center>
 
 where \\(B\in \mathbb{R}^{d\times r}\\), \\(A\in \mathbb{R}^{r\times d}\\) with rank \\(r \ll d\\). Under this decomposition the computation reduces significantly from \\(d\times d\\) to \\(d\times r+r\times d\\). The following graph illustrates the process and the respective initialization of matrices \\(B\\) and \\(A\\).
 
