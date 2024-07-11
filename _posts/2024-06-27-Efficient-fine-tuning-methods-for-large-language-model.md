@@ -42,7 +42,7 @@ One may suggest working with transfer learning to resolve the limitations, while
 
 P-tuning, or _prompt tuning_, is a parameter efficient tuning technique to solve this challenge. P-tuning uses a small trainable model before the LLM. The small model encodes the text prompt and creates task-specific virtual tokens. These tokens are pre-appended to the prompt and then passed to the LLM. Once tuning is finished, the virtual tokens are saved in a lookup table and used during inference, taking the place of the smaller model.
 
-![](./para.png)
+![](/images/para.png)
 
 Therefore, per set up of P-tuning naturally gives us a continuous way to feed prompts into the frozen model. The trainable continuous prompt embeddings can be further concatenated with discrete prompts to achieve better performance. We take an example to illustrate the process (notice we are restricted to NLU, or _Natural Language Processing_, tasks in the following discourse):
 
@@ -51,11 +51,11 @@ _A: Germany._
 
 Berlin is labeled as [X] and Germany [Y] here. If we tweak the language a bit:
 
-![](./discrete.png)
+![](/images/discrete.png)
 
 We can see a big drop of performance in some of the modification cases, while with P-tuning the result is more stable. One may ask, what exactly is the magic wand - how are the differentiable virtual tokens introduced?
 
-![](./comp.png)
+![](/images/comp.png)
 
 So basically $[P_i]$ is the continuous prompt embedding that needs to be learned, and $h_i$ is the input to be fed to the model. The prompt encoder that maps $[P_i]$ to $h_i$ can be anything, while they experimented the popular choices with LSTM giving the best performance.
 
@@ -70,11 +70,11 @@ In the previous set up, continuous prompts are only inserted into the input embe
 
 Therefore, P-tuning v2 is a deep prompt optimization of P-tuning to resolve the generalization issue, where they basically add prompts in different layers are added only as prefix tokens.
 
-![](./v2.png)
+![](/images/v2.png)
 
 Then by design P-tuning v2 has more tunable task-specific parameters and more direct impact on model predictions. The following experiments summarize the performances of fine-tuning, P-tuning, and P-tuning v2 across different model scales and different NLU tasks. 
 
-![](./result.png)
+![](/images/result.png)
 
 ## Reparamatrization
 
@@ -87,7 +87,7 @@ Considering the update $\Delta w_i \in \Delta w$ ($\in \Delta W$) for the $i$ th
 
 where $B\in \mathbb{R}^{d\times r}$, $A\in \mathbb{R}^{r\times d}$ with rank $r \ll d$. Under this decomposition the computation reduces significantly from $d\times d$ to $d\times r+r\times d$. The following graph illustrates the process and the respective initialization of matrices $B$ and $A$.
 
-![](./lora.png)
+![](/images/lora.png)
 
 ## Efficient optimization method
 
