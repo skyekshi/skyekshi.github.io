@@ -6,15 +6,38 @@ author: "Letian Shi, Keyan Shi"
 
 # Efficient fine-tuning methods for large language model
 
-Below is the content.
+Large language models (LLMs) revolutionize natural language processing (NLP) through their advanced abilities and complex solutions. These models are built using deep learning techniques, particularly neural networks with billions of parameters, enabling them to capture the nuances of language, context, and even subtle patterns in data. Trained on extensive text datasets, these models can handle various tasks such as text generation, translation, summarization, and answering questions. 
 
-## Additive
+Most LLMs exhibit high levels of generalization, enabling
+them to apply their acquired knowledge to new tasks not included in their original training. This capability is often referred to as _zero-shot learning_. However, LLMs may fall short when it comes to specific task-oriented issues. This leads to the fact that fine-tuning is crucial for further improving LLMs to achieve optimal performance on new user datasets and tasks without the need to develop new models from scratch.
 
-### Adpater tuning
+Unfortunately, as LLMs increase in size, the costs associated with fine-tuning and storing all parameters become prohibitively expensive and eventually practically unfeasible.
+In this blog, we explore why classical fine-tuning LLMs cannot work well and discuss how different _efficient_ fine-tuning methods become a critical component of LLM-powered solutions.
 
-#### 1. Parameter-Efficient Transfer Learning for NLP
+## Classical techniques to update pretrained LLM weights for finetuning
 
-### Prompt engineering
+### Finetune whole model parameters
+
+If conditions permit, using the user's own data to update the weights of pretrained LLMs will naturally yield the best results. 
+However, as shown in the table below, popular open-source LLMs today are characterized by large model sizes, a high number of parameters, and a significant number of tokens.
+
+| **Model** | **# Parameters** | **# Tokens** |
+|-----------|------------------|--------------|
+| **LLaMA2** | **70B**          | **2T**       |
+| **PAML2**  | **340B**         | **3.6T**     |
+| **MPT**    | **7B**           | **1T**       |
+| **Falcon** | **180B**         | **1.5T**     |
+| **Gemini** | **3.25B**        | **5.5T**     |
+
+As shown in the table above, LLMs are larger in scale compared to other models. Therefore, fine-tuning large language models requires significant computational power, which may not be available on standard PCs or regular servers. For example, the GeForce 4080 only has 16GB GPU memory can only put a Geimini model, but it is impossible to train anymore on this device.
+
+### Transfer learning
+
+Transfer learning (also so known as linear probing) is the method that we freeze nearly all the layers of the pretrained model and only train the last layer during the fine-tuning process. The last layer maybe change for different tasks. If the downstream tasks is "Yes/No" answering question, the last layer only has 2 dim. Moreover, if the new tasks is text generalization, the last layer is the number of used tokenizers in the model.
+
+Transfer learning works very well in CV models but not very well in LLMs. The main reason is the domain mismatch. There are many downstrem tasks for the LLMs. For instance, classification, multiple choice, text generation, translation, personalized chat-bots, and summarization. Even though the pre-trained model is carefully trained on a large amount of data, we cannot guarantee that the similarity between the data used for pre-training and the data for the user's own task. Only modifying paramters of one layers or several lasting layers are not able to bridge the difference between the original and new tasks.
+
+### In-context learning
 
 Prompts are typically used as means to interact with LLMs, where users provide to which the model is to respond. A prompt can be texts, images, videos, etc. in different use cases. Prompt engineering, in turn, refers to the process of designing the prompts for target outputs. For example, we can ask:
 
@@ -33,6 +56,19 @@ _A: <mark>Berlin.</mark>_
 Hence, the _few-shot_ prompt enables the model to learn without parameter tuning. However, one can already spot some shortcomings of prompt engineering in the process - a few examples must be pre-appended, affecting the token budget.
 
 One may suggest working with transfer learning to resolve the limitations, while fine-tuning the entire model (BERT-base 110-345M, BERT-large 340-770M, GPT-3 175B paratemers) requires considerable computational resources, and it has a typical trade-off with model performance.
+
+## Parameter efficient fine-tuning (PEFT)
+
+Because of the size of LLMs, a commonly used approach to fine-tune LLMs involves modifying a subset of LLM parameters while leaving the rest unchanged. This method, known as _Parameter-Efficient Fine-Tuning_ (PEFT), selectively adjusts a small fraction of the parameters while maintaining the majority unchanged. 
+Specifically, PEFT involves modifying the parameters of a pre-trained large model to tailor it for a particular task or domain, aiming to minimize the introduction of additional parameters or computational resources needed.
+
+### Adpater tuning
+
+#### 1. Parameter-Efficient Transfer Learning for NLP
+
+### Prompt engineering
+
+
 
 #### 2. Prefix-tuning 
 
@@ -96,6 +132,4 @@ where \\(B\in \mathbb{R}^{d\times r}\\), \\(A\in \mathbb{R}^{r\times d}\\) with 
 ![](/images/lora.png)
 
 ## Efficient optimization method
-
-
 
