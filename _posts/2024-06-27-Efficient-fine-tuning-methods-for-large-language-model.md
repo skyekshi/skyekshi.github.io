@@ -64,10 +64,10 @@ Hence, the _few-shot_ prompt enables the model to learn without parameter tuning
 Because of the size of LLMs, a commonly used approach to fine-tune LLMs involves modifying a subset of LLM parameters while leaving the rest unchanged. This method, known as _Parameter-Efficient Fine-Tuning_ (PEFT), selectively adjusts a small fraction of the parameters while maintaining the majority unchanged. 
 Specifically, PEFT involves modifying the parameters of a pre-trained large model to tailor it for a particular task or domain, aiming to minimize the introduction of additional parameters or computational resources needed.
 
-There are three types of PEFT algorithms. 
-1) **Additive PEFT**: add new trainable modules or parameters.
-2) **Selective PEFT**: select a subset of parameters trainable during fine-tuning,
-3) **Reparameterization PEFT**: create a reparameterization of the original model parameters for training and then converts it back to its original form for inference.
+There are three types of PEFT algorithms. <br>
+1) **Additive PEFT**: add new trainable modules or parameters. <br>
+2) **Selective PEFT**: select a subset of parameters trainable during fine-tuning. <br>
+3) **Reparameterization PEFT**: create a reparameterization of the original model parameters for training and then converts it back to its original form for inference. <br>
 
 ### 1. Additive PEFT
 Standard full fine-tuning involves significant computational costs.  To address this issue, a common strategy is to keep the pre-trained model intact and add only a small set of trainable parameters strategically placed within the model architecture. During fine-tuning for a specific downstream task, only the weights of these additional parameters are updated.
