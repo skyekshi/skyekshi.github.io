@@ -82,7 +82,7 @@ Adapter methods entail adding small adapter layers into Transformer blocks.
 
 <center>
 $$ 
-Adapter(x) = W_{up}\,\sigma(W_{down}\,x) + x
+\text{Adapter}(x) = W_{up}\,\sigma(W_{down}\,x) + x
 $$
 </center>
 where \\(W_{down} \in \mathbb{R}^{d\times r}\\), \\(W_{up} \in \mathbb{R}^{r\times d}\\) with rank \\(r \ll d\\). 
@@ -91,7 +91,7 @@ d represents the dimension of the hidden layer, and r serves as the bottleneck d
 
 ![](/images/2.png) 
 
-In the method, each Transformer block is augmented by adding two adapter modules: one placed after the self-attention layer and the other after the feed-forward network (FFN) layer.
+In the method, each Transformer block is augmented by adding two adapter modules,placed after the feed-forward network (FFN) layer.
 
 The adventages of serial adapter are: 1) By adding a few trainable parameters, it is possible to nearly achieve the effect of full parameter training. 2) This significantly reduces training time, ensuring time efficiency. 3) Barely decreases the model's performance on downstream tasks.
 
@@ -111,7 +111,7 @@ $$
 \mathbf{X}^{(l)} = [\mathbf{s}_1^{(l)}, \ldots, \mathbf{s}_{N_s}^{(l)}, \mathbf{x}_1^{(l)}, \ldots, \mathbf{x}_{N_x}^{(l)}]
 $$
 </center>
-where \(\mathbf{X}^{(l)}\) is the sequence of input tokens for layer \(l\), including soft prompt tokens \(\mathbf{s}_i^{(l)}\) followed by the original input tokens \(\mathbf{x}_i^{(l)}\). \(N_s\) is the number of soft prompt tokens, and \(N_x\) is the number of original input tokens.
+where \\(\mathbf{X}^{(l)}\\) is the sequence of input tokens for layer \\(l\\), including soft prompt tokens \\(\mathbf{s}_i^{(l)}\\) followed by the original input tokens \\(\mathbf{x}_i^{(l)}\\). \\(N_s\\) is the number of soft prompt tokens, and \\(N_x\\) is the number of original input tokens.
 
 #### Prefix-tuning (Li & Liang, 2021)
 
@@ -119,11 +119,11 @@ Different from all Transformer parameters (the red Transformer box in the follow
 
 ![](/images/3.png) 
 
-Let's use an example to demonstrate how to apply the prefix-tuning method. In the following graph, we put the prefix encoders before the source and target encoder as prefix setting can be done without being affected by the length of the sentence and padding. In the example, \(h_1\) and \(h_2\) are prefix encoders. \(z=[\text{prefix}, x, y]\) is the final tokenizers after prefix-tuning.
+Let's use an example to demonstrate how to apply the prefix-tuning method. In the following graph, we put the prefix encoders before the source and target encoder as prefix setting can be done without being affected by the length of the sentence and padding. In the example, \\(h_1\\) and \\(h_2\\) are prefix encoders. \\(z=[\text{prefix}, x, y]\\) is the final tokenizers after prefix-tuning.
 
 ![](/images/4.png) 
 
-P\(_{\text{idx}}\) denotes the sequence of prefix indices. The training objective is to maximize \(p(y\|x)\).  The language model parameters \(\phi\) are fixed and the prefix parameters \(\theta\) are the only trainable parameters. Thus, any hidden states is a function of the trainable model P\(_{\text{idx}}\). 
+P\\(_{\text{idx}}\\) denotes the sequence of prefix indices. The training objective is to maximize \\(p(y\|x)\\).  The language model parameters \\(\phi\\) are fixed and the prefix parameters \\(\theta\\) are the only trainable parameters. Thus, any hidden states is a function of the trainable model P\\(_{\text{idx}}\\). 
 
 $$
 \begin{align}
@@ -179,13 +179,13 @@ Then by design P-tuning v2 has more tunable task-specific parameters and more di
 ### 2. Selective PEFT
 Instead of additive PEFT, which increases model complexity by introducing additional parameters, selective PEFT fine-tunes a subset of the existing parameters to improve model performance on downstream tasks.
 
-**Selective PEFT** involves modifying a model's parameters \(\theta = \{\theta_1, \theta_2, ..., \theta_n\}\), where each \(\theta_i\) represents an individual parameter and \(n\) denotes the total number of parameters. This method utilizes a binary mask \(M = \{m_1, m_2, ..., m_n\}\) applied to these parameters. Each \(m_i\) in \(M\) is binary (0 or 1), indicating whether the corresponding parameter \(\theta_i\) should be included (1) or excluded (0) during fine-tuning. The updated parameter set after fine-tuning is computed as:
+**Selective PEFT** involves modifying a model's parameters \\(\theta = \{\theta_1, \theta_2, ..., \theta_n\}\\), where each \\(\theta_i\\) represents an individual parameter and \\(n\\) denotes the total number of parameters. This method utilizes a binary mask \\(M = \{m_1, m_2, ..., m_n\}\\) applied to these parameters. Each \\(m_i\\) in \\(M\\) is binary (0 or 1), indicating whether the corresponding parameter \\(\theta_i\\) should be included (1) or excluded (0) during fine-tuning. The updated parameter set after fine-tuning is computed as:
 \[
 \theta_{i+1} = \theta_i - \eta \cdot m_i \cdot \frac{\partial \mathcal{L}}{\partial \theta_i}
 \]
-Here, \(\eta\) denotes the learning rate, and \(\frac{\partial \mathcal{L}}{\partial \theta_i}\) represents the gradient of the loss function \(\mathcal{L}\) with respect to \(\theta_i\). During backpropagation, only the parameters that are selected (\(m_i = 1\)) are updated, optimizing the model effectively while minimizing computational overhead.
+Here, \\(\eta\\) denotes the learning rate, and \\(\frac{\partial \mathcal{L}}{\partial \theta_i}\\) represents the gradient of the loss function \(\mathcal{L}\) with respect to \\(\theta_i\\). During backpropagation, only the parameters that are selected (\\(m_i = 1\\)) are updated, optimizing the model effectively while minimizing computational overhead.
 
-**Diff pruning (Guo et al., 2020)** is an influential study that employs a trainable binary mask on model weights during fine-tuning. To enhance parameter efficiency, the mask is controlled using a differentiable approximation of the $L_0$-norm penalty. **PaFi (Liao et al., 2023)** simply select the smallest absolute value model parameters as trainable ones. **SAM (Fu et al., 2023)** introduces a second-order approximation method to assist in determining the parameter mask. This method approximates the original problem using an optimization function that can be solved analytically.
+**Diff pruning (Guo et al., 2020)** is an influential study that employs a trainable binary mask on model weights during fine-tuning. To enhance parameter efficiency, the mask is controlled using a differentiable approximation of the \\(L_0\\)-norm penalty. **PaFi (Liao et al., 2023)** simply select the smallest absolute value model parameters as trainable ones. **SAM (Fu et al., 2023)** introduces a second-order approximation method to assist in determining the parameter mask. This method approximates the original problem using an optimization function that can be solved analytically.
 
 
 ### 3. Reparamatrization PEFT
