@@ -123,7 +123,7 @@ Let's use an example to demonstrate how to apply the prefix-tuning method. In th
 
 ![](/images/4.png) 
 
-P\\(_{\text{idx}}\\) denotes the sequence of prefix indices. The training objective is to maximize \\(p(y\|x)\\).  The language model parameters \\(\phi\\) are fixed and the prefix parameters \\(\theta\\) are the only trainable parameters. Thus, any hidden states is a function of the trainable model P\\(_{\text{idx}}\\). 
+\\(\text{P}_{\text{idx}}\\) denotes the sequence of prefix indices. The training objective is to maximize \\(p(y\|x)\\).  The language model parameters \\(\phi\\) are fixed and the prefix parameters \\(\theta\\) are the only trainable parameters. Thus, any hidden states is a function of the trainable model \\(\text{P}_{\text{idx}}\\). 
 
 $$
 \begin{align}
@@ -183,7 +183,7 @@ Instead of additive PEFT, which increases model complexity by introducing additi
 $$
 \theta_{i+1} = \theta_i - \eta \cdot m_i \cdot \frac{\partial \mathcal{L}}{\partial \theta_i}
 $$
-Here, \\(\eta\\) denotes the learning rate, and \\(\frac{\partial \mathcal{L}}{\partial \theta_i}\\) represents the gradient of the loss function \(\mathcal{L}\) with respect to \\(\theta_i\\). During backpropagation, only the parameters that are selected (\\(m_i = 1\\)) are updated, optimizing the model effectively while minimizing computational overhead.
+Here, \\(\eta\\) denotes the learning rate, and \\(\frac{\partial \mathcal{L}}{\partial \theta_i}\\) represents the gradient of the loss function \\(\mathcal{L}\\) with respect to \\(\theta_i\\). During backpropagation, only the parameters that are selected (\\(m_i = 1\\)) are updated, optimizing the model effectively while minimizing computational overhead.
 
 **Diff pruning (Guo et al., 2020)** is an influential study that employs a trainable binary mask on model weights during fine-tuning. To enhance parameter efficiency, the mask is controlled using a differentiable approximation of the \\(L_0\\)-norm penalty. **PaFi (Liao et al., 2023)** simply select the smallest absolute value model parameters as trainable ones. **SAM (Fu et al., 2023)** introduces a second-order approximation method to assist in determining the parameter mask. This method approximates the original problem using an optimization function that can be solved analytically.
 
