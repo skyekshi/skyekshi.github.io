@@ -224,11 +224,11 @@ PEFT saves computation space, but compared to the inference process, it still re
 
 In this work, they propose a memory-efficient zeroth-order optimizer (MeZO), adapting the classical ZO-SGD method to operate in place, thereby fine-tuning LLMs with the same memory as inference. 
 
-Consider a labelled dataset \\(\cD = \{(\bx_i, \by_i)\}_{i \in [\abs{\cD}]}\\)  
-% We let \\(\cL(\btheta; \{(\bx, \by)\})\\) denote the loss on a single example \\((\bx, \by)\\), and \\(\cL(\btheta) := \frac{1}{\abs{\cD}}\sum_{(\bx, \by) \in \cD}\cL(\btheta; \{(\bx, \by)\})\\) be the loss on the entire dataset \\(\cD\\). 
-and a minibatch \\(\cB \subset \cD\\) of size \\(B\\), we let \\(\cL(\btheta; \cB)\\) denote the loss on the minibatch. 
+The ZO-SGD utilizes Simultaneous Perturbation Stochastic Approximation (SPSA).
 
-\begin{definition}[Simultaneous Perturbation Stochastic Approximation or SPSA] Given a model with parameters $\vtheta\in\RR^d$ and a loss function $\Loss$, SPSA estimates the gradient on a minibatch $\cB$ as
+Consider a dataset \\(D\\) and a minibatch \\(B \subset D\\), we let \\(L(\btheta; B)\\) denote the loss on the minibatch. 
+
+\begin{definition}[ or SPSA] Given a model with parameters $\vtheta\in\RR^d$ and a loss function $\Loss$, SPSA estimates the gradient on a minibatch $\cB$ as
 	\begin{equation}
 		\hat\nabla\cL(\vtheta;\cB) =  \frac{\cL(\vtheta + \epsilon\vz;\cB) - \cL(\vtheta - \epsilon\vz;\cB)}{2\epsilon}\vz \approx \vz\vz^\top \nabla\cL(\vtheta;\cB) 
 		\label{eq:spsa}
