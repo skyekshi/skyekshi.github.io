@@ -218,6 +218,24 @@ Several subsequent researches aim to improve LoRA’s performance in various asp
 ## Efficient Optimization Method
 
 
+PEFT saves computation space, but compared to the inference process, it still requires additional model structures during the fine-tuning process. Moreover, during the backpropagation calculation, extra memory is needed to store gradients. To further save memory and improve efficiency, we can adopt new efficient optimization methods.
+
+#### Memory Efficient Zeroth Order Optimization (Malladi et al., 2023)
+
+In this work, they propose a memory-efficient zeroth-order optimizer (MeZO), adapting the classical ZO-SGD method to operate in place, thereby fine-tuning LLMs with the same memory as inference. 
+
+Consider a labelled dataset \\(\cD = \{(\bx_i, \by_i)\}_{i \in [\abs{\cD}]}\\)  
+% We let \\(\cL(\btheta; \{(\bx, \by)\})\\) denote the loss on a single example \\((\bx, \by)\\), and \\(\cL(\btheta) := \frac{1}{\abs{\cD}}\sum_{(\bx, \by) \in \cD}\cL(\btheta; \{(\bx, \by)\})\\) be the loss on the entire dataset \\(\cD\\). 
+and a minibatch \\(\cB \subset \cD\\) of size \\(B\\), we let \\(\cL(\btheta; \cB)\\) denote the loss on the minibatch. 
+
+\begin{definition}[Simultaneous Perturbation Stochastic Approximation or SPSA] Given a model with parameters $\vtheta\in\RR^d$ and a loss function $\Loss$, SPSA estimates the gradient on a minibatch $\cB$ as
+	\begin{equation}
+		\hat\nabla\cL(\vtheta;\cB) =  \frac{\cL(\vtheta + \epsilon\vz;\cB) - \cL(\vtheta - \epsilon\vz;\cB)}{2\epsilon}\vz \approx \vz\vz^\top \nabla\cL(\vtheta;\cB) 
+		\label{eq:spsa}
+	\end{equation}
+	where $\vz\in\RR^d$ with $\vz\sim\cN(0,\mI_d)$ and $\epsilon$ is the \emph{perturbation scale}. The $n$-SPSA gradient estimate averages $\hat\nabla\cL(\vtheta;\cB)$ over $n$ randomly sampled $\vz$. 
+	\label{def:spsa}
+\end{definition}
 
 ## Conclusion
 
