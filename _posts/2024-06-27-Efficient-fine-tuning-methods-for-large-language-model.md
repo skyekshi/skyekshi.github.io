@@ -226,16 +226,13 @@ In this work, they propose a memory-efficient zeroth-order optimizer (MeZO), ada
 
 The ZO-SGD utilizes Simultaneous Perturbation Stochastic Approximation (SPSA).
 
-Consider a dataset \\(D\\) and a minibatch \\(B \subset D\\), we let \\(L(\btheta; B)\\) denote the loss on the minibatch. 
+Consider a dataset \\(D\\) and a minibatch \\(B \subset D\\), we let \\(L(\mathbf{\theta}; B)\\) denote the loss on the minibatch. A model with parameters \\(\mathbf{\theta} \in \mathbb{R}^d\\), SPSA estimates the gradient on a minibatch \\(B\\) as
 
-\begin{definition}[ or SPSA] Given a model with parameters $\vtheta\in\RR^d$ and a loss function $\Loss$, SPSA estimates the gradient on a minibatch $\cB$ as
-	\begin{equation}
-		\hat\nabla\cL(\vtheta;\cB) =  \frac{\cL(\vtheta + \epsilon\vz;\cB) - \cL(\vtheta - \epsilon\vz;\cB)}{2\epsilon}\vz \approx \vz\vz^\top \nabla\cL(\vtheta;\cB) 
-		\label{eq:spsa}
-	\end{equation}
-	where $\vz\in\RR^d$ with $\vz\sim\cN(0,\mI_d)$ and $\epsilon$ is the \emph{perturbation scale}. The $n$-SPSA gradient estimate averages $\hat\nabla\cL(\vtheta;\cB)$ over $n$ randomly sampled $\vz$. 
-	\label{def:spsa}
-\end{definition}
+$$
+\hat\nabla L(\mathbf{theta}; B) =  \frac{ L(\mathbf{theta} + \epsilon\vz;B) - L(\mathbf{theta} - \epsilon\vz;B)}{2\epsilon}\mathbf{z} \approx \mathbf{z}\mathbf{z}^\top \nabla L(\mathbf{theta}; B) 
+$$
+
+where \\(\mathbf{z} \in \mathbb{R}^d\\) with \\(\mathbf{z} \sim N(0,\mI_d)\\) and \\(\epsilon\\) is the _perturbation scale__. The \\(n\\)-SPSA gradient estimate averages \\(\hat\nabla L(\mathbf{theta};B)\\) over \\(n\\) randomly sampled \\(\mathbf{z}\\). 
 
 ## Conclusion
 
