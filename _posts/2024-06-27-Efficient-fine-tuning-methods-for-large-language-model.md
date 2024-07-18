@@ -123,7 +123,7 @@ Let's use an example to demonstrate how to apply the prefix-tuning method. In th
 
 ![](/images/4.png) 
 
-Based on the following equation, \\(\text{P_{idx}}\\) denotes the sequence of prefix indices. The training objective is to maximize \\(p(y\|x)\\).  The language model parameters \\(\phi\\) are fixed and the prefix parameters \\(\theta\\) are the only trainable parameters. Thus, any hidden states is a function of the trainable model \\(\text{P_{idx}}\\). 
+Based on the following equation, \\(P_{\text{idx}}\\) denotes the sequence of prefix indices. The training objective is to maximize \\(p(y\|x)\\).  The language model parameters \\(\phi\\) are fixed and the prefix parameters \\(\theta\\) are the only trainable parameters. Thus, any hidden states is a function of the trainable model \\(P_{\text{idx}}\\). 
 
 $$
 h_{i} = 
