@@ -224,15 +224,16 @@ PEFT saves computation space, but compared to the inference process, it still re
 
 In this work, they propose a memory-efficient zeroth-order optimizer (MeZO), adapting the classical ZO-SGD method to operate in place, thereby fine-tuning LLMs with the same memory as inference. 
 
-The ZO-SGD utilizes Simultaneous Perturbation Stochastic Approximation (SPSA).
+The ZO-SGD utilizes Simultaneous Perturbation Stochastic Approximation (SPSA). 
+This optimization algorithm is a systematic process that iteratively adjusts the parameters from an initial guess to values that enhance the objective function. 
 
 Consider a dataset \\(D\\) and a minibatch \\(B \subset D\\), we let \\(L(\mathbf{\theta}; B)\\) denote the loss on the minibatch. A model with parameters \\(\mathbf{\theta} \in \mathbb{R}^d\\), SPSA estimates the gradient on a minibatch \\(B\\) as
 
 $$
-\hat\nabla L(\mathbf{theta}; B) =  \frac{ L(\mathbf{theta} + \epsilon\vz;B) - L(\mathbf{theta} - \epsilon\vz;B)}{2\epsilon}\mathbf{z} \approx \mathbf{z}\mathbf{z}^\top \nabla L(\mathbf{theta}; B) 
+\hat\nabla L(\mathbf{\theta}; B) =  \frac{ L(\mathbf{\theta} + \epsilon\mathbf{z};B) - L(\mathbf{\theta} - \epsilon\mathbf{z};B)}{2\epsilon}\mathbf{z} \approx \mathbf{z}\mathbf{z}^\top \nabla L(\mathbf{\theta}; B) 
 $$
 
-where \\(\mathbf{z} \in \mathbb{R}^d\\) with \\(\mathbf{z} \sim N(0,\mI_d)\\) and \\(\epsilon\\) is the _perturbation scale__. The \\(n\\)-SPSA gradient estimate averages \\(\hat\nabla L(\mathbf{theta};B)\\) over \\(n\\) randomly sampled \\(\mathbf{z}\\). 
+where \\(\mathbf{z} \in \mathbb{R}^d\\) with \\(\mathbf{z} \sim N(0,\mI_d)\\) and \\(\epsilon\\) is the _perturbation scale_. 
 
 ## Conclusion
 
