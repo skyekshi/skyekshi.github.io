@@ -222,7 +222,7 @@ PEFT saves computation space, but compared to the inference process, it still re
 
 #### Memory Efficient Zeroth Order Optimization (Malladi et al., 2023)
 
-In this work, they propose a memory-efficient zeroth-order optimizer (MeZO), adapting the classical ZO-SGD method to operate in place, thereby fine-tuning LLMs with the same memory as inference. 
+As the classical optimization (e.g. SGD) necessitate extra memories to store the backpropogation intermidate values and the gradient results. In this work, they propose a memory-efficient zeroth-order optimizer (MeZO), adapting the classical ZO-SGD method to operate in place to avoid backpropogation and gradient saving, thereby fine-tuning LLMs with the same memories as inference.
 
 The ZO-SGD utilizes Simultaneous Perturbation Stochastic Approximation (SPSA). 
 This optimization algorithm is a systematic process that iteratively adjusts the parameters from an initial guess to values that enhance the objective function. 
@@ -233,7 +233,11 @@ $$
 \hat\nabla L(\mathbf{\theta}; B) =  \frac{ L(\mathbf{\theta} + \epsilon\mathbf{z};B) - L(\mathbf{\theta} - \epsilon\mathbf{z};B)}{2\epsilon}\mathbf{z} \approx \mathbf{z}\mathbf{z}^\top \nabla L(\mathbf{\theta}; B) 
 $$
 
-where \\(\mathbf{z} \in \mathbb{R}^d\\) with \\(\mathbf{z} \sim N(0,\mI_d)\\) and \\(\epsilon\\) is the _perturbation scale_. 
+where \\(\mathbf{z} \in \mathbb{R}^d\\) with \\(\mathbf{z} \sim N(0,I_d)\\) and \\(\epsilon\\) is the _perturbation scale_. In this way, SPSA requires only _two forward passes_ through the model instead of backpropogation to compute the gradient. As ZO-SGD also needs to store \\(\mathbf{z} \in \mathbb{R}^d\\), it is necessary to propose a memory-efficient implementation of ZO-SGD called MeZO.
+
+![](/images/5.jpg)
+
+In the Algorithm 1, we begin each step by randomly selecting a seed \\(s\\). Instead of saving \\(\mathbf{z}\\), we use the same seed \\(s\\) in each step to generate the same \\(\mathbf{z}\\) element-by-element for the four \\(\mathbf{z}\\) applications. With this in-place implementation, MeZO's memory usage is equal to the memory required for inference.
 
 ## Conclusion
 
