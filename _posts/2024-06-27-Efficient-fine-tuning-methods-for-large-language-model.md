@@ -180,9 +180,9 @@ Then by design P-tuning v2 has more tunable task-specific parameters and more di
 Instead of additive PEFT, which increases model complexity by introducing additional parameters, selective PEFT fine-tunes a subset of the existing parameters to improve model performance on downstream tasks.
 
 **Selective PEFT** involves modifying a model's parameters \\(\theta = \{\theta_1, \theta_2, ..., \theta_n\}\\), where each \\(\theta_i\\) represents an individual parameter and \\(n\\) denotes the total number of parameters. This method utilizes a binary mask \\(M = \{m_1, m_2, ..., m_n\}\\) applied to these parameters. Each \\(m_i\\) in \\(M\\) is binary (0 or 1), indicating whether the corresponding parameter \\(\theta_i\\) should be included (1) or excluded (0) during fine-tuning. The updated parameter set after fine-tuning is computed as:
-\[
+$$
 \theta_{i+1} = \theta_i - \eta \cdot m_i \cdot \frac{\partial \mathcal{L}}{\partial \theta_i}
-\]
+$$
 Here, \\(\eta\\) denotes the learning rate, and \\(\frac{\partial \mathcal{L}}{\partial \theta_i}\\) represents the gradient of the loss function \(\mathcal{L}\) with respect to \\(\theta_i\\). During backpropagation, only the parameters that are selected (\\(m_i = 1\\)) are updated, optimizing the model effectively while minimizing computational overhead.
 
 **Diff pruning (Guo et al., 2020)** is an influential study that employs a trainable binary mask on model weights during fine-tuning. To enhance parameter efficiency, the mask is controlled using a differentiable approximation of the \\(L_0\\)-norm penalty. **PaFi (Liao et al., 2023)** simply select the smallest absolute value model parameters as trainable ones. **SAM (Fu et al., 2023)** introduces a second-order approximation method to assist in determining the parameter mask. This method approximates the original problem using an optimization function that can be solved analytically.
