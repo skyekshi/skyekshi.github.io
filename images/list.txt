@@ -1,0 +1,4 @@
+1. https://www.geeksforgeeks.org/transfer-learning-with-fine-tuning-in-nlp/
+2. Parameter-Efficient Transfer Learning for NLP
+3. Prefix-Tuning: Optimizing Continuous Prompts for Generation
+4. Prefix-Tuning: Optimizing Continuous Prompts for Generation 
