@@ -123,16 +123,15 @@ Let's use an example to demonstrate how to apply the prefix-tuning method. In th
 
 ![](/images/4.png) 
 
-\\(\text{P}_{\text{idx}}\\) denotes the sequence of prefix indices. The training objective is to maximize \\(p(y\|x)\\).  The language model parameters \\(\phi\\) are fixed and the prefix parameters \\(\theta\\) are the only trainable parameters. Thus, any hidden states is a function of the trainable model \\(\text{P}_{\text{idx}}\\). 
+
+\\($\text{P}_{\text{idx}}$\\) denotes the sequence of prefix indices. The training objective is to maximize \\(p(y\|x)\\).  The language model parameters \\(\phi\\) are fixed and the prefix parameters \\(\theta\\) are the only trainable parameters. Thus, any hidden states is a function of the trainable model \\($\text{P}_{\text{idx}}$\\). 
 
 $$
-\begin{align}
 h_{i} = 
 \begin{cases}
 \text{P}_{\theta}[i,:],      & \text{if } i \in \text{P}_{\text{idx}} \text{,}\\
 \text{LM}_\phi(z_i, h_{<i}),    & \text{otherwise.}
 \end{cases}
-\end{align}
 $$
 
 **Prefix-tuning** adopts an MLP layer to generate these prefix vectors rather than
