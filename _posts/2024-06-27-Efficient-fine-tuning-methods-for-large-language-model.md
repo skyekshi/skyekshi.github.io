@@ -111,11 +111,13 @@ $$
 \mathbf{X}^{(l)} = [\mathbf{s}_1^{(l)}, \ldots, \mathbf{s}_{N_s}^{(l)}, \mathbf{x}_1^{(l)}, \ldots, \mathbf{x}_{N_x}^{(l)}]
 $$
 </center>
-where \\(\mathbf{X}^{(l)}\\) is the sequence of input tokens for layer \\(l\\), including soft prompt tokens \\(\mathbf{s}_i^{(l)}\\) followed by the original input tokens \\(\mathbf{x}_i^{(l)}\\). \\(N_s\\) is the number of soft prompt tokens, and \\(N_x\\) is the number of original input tokens.
+where \\(\mathbf{X}^{(l)}\\) is the sequence of input tokens for layer \\(l\\), including soft prompt tokens \\(\mathbf{s}_i^{(l)}\\) followed by the original input tokens \\(\mathbf{x}_i^{(l)}\\). \\(N_s\\) is the number of soft prompt tokens, and \\(N_x\\) is the number of original input tokens. Prompt tuning demonstrates outperformance compared to fine-tuning (or "model-tuning" as shown in the following figure):
+
+![](/images/para.png)
 
 #### Prefix-tuning (Li & Liang, 2021)
 
-Different from all Transformer parameters (the red Transformer box in the following picture) and storing a full model copy for each task, **Prefix-tuning** introduces a light alternative approach to fine-tuning for NLP tasks, which keeps pretrained language model parameters frozen, but optimizes a small _continuous task-specific_ vector known as prefix (the red blocks below).  Prefix-tuning is inspired by prompting, enabling subsequent tokens to interact with this prefix as though they were "virtual tokens." 
+Prefix-tuning introduces a lightweight alternative to full model fine-tuning for NLP tasks. Unlike traditional methods that adjust all Transformer parameters (the red Transformer box in the following picture), prefix-tuning keeps the pretrained language model parameters frozen and optimizes a small _continuous task-specific_ vector called the prefix (the red blocks below).  Prefix-tuning is inspired by prompting, enabling subsequent tokens to interact with this prefix as though they were "virtual tokens." 
 
 ![](/images/3.png) 
 
@@ -138,11 +140,7 @@ optimizing them directly. After fine-tuning, only the prefix vectors are saved f
 
 #### P-tuning (Liu et al., 2023)
 
-P-tuning, or _prompt tuning_, is a parameter efficient tuning technique to solve this challenge. P-tuning uses a small trainable model before the LLM. The small model encodes the text prompt and creates task-specific virtual tokens. These tokens are pre-appended to the prompt and then passed to the LLM. Once tuning is finished, the virtual tokens are saved in a lookup table and used during inference, taking the place of the smaller model.
-
-![](/images/para.png)
-
-Therefore, per set up of P-tuning naturally gives us a continuous way to feed prompts into the frozen model. The trainable continuous prompt embeddings can be further concatenated with discrete prompts to achieve better performance. We take an example to illustrate the process (notice we are restricted to NLU, or _Natural Language Processing_, tasks in the following discourse):
+P-tuning, or _prompt tuning_, is another parameter efficient tuning technique to solve the challenge. The set up of P-tuning is similar to the one of prefix-tuning, while soft prompts are not limited to prefixes. The trainable continuous prompt embeddings can be further concatenated with discrete prompts to achieve better performance. We take an example to illustrate the process (notice we are restricted to NLU, or _Natural Language Processing_, tasks in the following discourse):
 
 _Q: Where is Berlin located?_<br>
 _A: Germany._
@@ -151,7 +149,7 @@ Berlin is labeled as [X] and Germany [Y] here. If we tweak the language a bit:
 
 ![](/images/discrete.png)
 
-We can see a big drop of performance in some of the modification cases, while with P-tuning the result is more stable. One may ask, what exactly is the magic wand - how are the differentiable virtual tokens introduced?
+We can see a big drop of performance in some of the modification cases, while with P-tuning the result is more stable. The following figure further illustrates how soft prompts work and why not only prefixes are permitted:
 
 ![](/images/comp.png)
 
@@ -166,13 +164,14 @@ In the previous set up, continuous prompts are only inserted into the input embe
 * The number of tunable parameters is limited due to the restriction on sequence length.<br>
 * Input embeddings have only a relatively indirect impact on model prediction.
 
-Therefore, P-tuning v2 is a deep prompt optimization of P-tuning to resolve the generalization issue, where they basically add prompts in different layers are added only as prefix tokens.
+Therefore, P-tuning v2 is a deep prompt optimization of P-tuning to resolve the generalization issue, where they basically add prompts in different layers are added only as prefix tokens. Essentially speaking, P-tuning v2 is Prefix-tuning applied to BERT-type models.
 
 ![](/images/v2.png)
 
 Then by design P-tuning v2 has more tunable task-specific parameters and more direct impact on model predictions. The following experiments summarize the performances of fine-tuning, P-tuning, and P-tuning v2 across different model scales and different NLU tasks. 
 
-![](/images/result.png)
+![](/images/result1.png)
+![](/images/result2.png)
 
 ### 2. Selective PEFT
 Instead of additive PEFT, which increases model complexity by introducing additional parameters, selective PEFT fine-tunes a subset of the existing parameters to improve model performance on downstream tasks.
@@ -215,8 +214,7 @@ During the training, the pretrained model (blue part) will be frozen, while the 
 
 Several subsequent researches aim to improve LoRA’s performance in various aspects. **Laplace-LoRA (Yang et al., 2023)** applies a Bayesian approach, specifically a Laplace approximation, which predicts the posterior of the LoRA to aviod overfitting. **LoRA+ (Hayou et al., 2024)** proposes to set different learning rates for the LoRA matrices A and B seperatively. **MoSLoRA (Wu et al., 2024a)** decomposes LoRA into subspaces using structural reparameterization. It then utilizes a trainable mixer, trained alongside the original LoRA weights, to blend these subspaces together.
 
-## Efficient Optimization Method
-
+### Efficient Optimization Method
 
 PEFT saves computation space, but compared to the inference process, it still requires additional model structures during the fine-tuning process. Moreover, during the backpropagation calculation, extra memory is needed to store gradients. To further save memory and improve efficiency, we can adopt new efficient optimization methods.
 
@@ -240,7 +238,7 @@ where \\(\mathbf{z} \in \mathbb{R}^d\\) with \\(\mathbf{z} \sim N(0,I_d)\\) and 
 In the Algorithm 1, we begin each step by randomly selecting a seed \\(s\\). Instead of saving \\(\mathbf{z}\\), we use the same seed \\(s\\) in each step to generate the same \\(\mathbf{z}\\) element-by-element for the four \\(\mathbf{z}\\) applications. With this in-place implementation, MeZO's memory usage is equal to the memory required for inference.
 
 ## Conclusion
-
+In this blog, we briefly introduced the "tricks" people have been using to improve LLM performance as a lightweight alternative to whole model tuning. Adapter PEFT adds a small adapter, Selective PEFT fine-tunes only part of the parameters, and Reparameterization PEFT reparameterizes the model’s weights to facilitate more efficient fine-tuning. In addition to compute savings on the parameter side, MeZO represents the "update" in a more efficient way that does not require gradient calculation and embeds it into forward passes.
 
 ## Reference
 [1] Parameter-Efficient Fine-Tuning for Large Models: A Comprehensive Survey <br>
