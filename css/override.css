@@ -43,15 +43,15 @@
   opacity: 0.3;
 } */
 
-/* --- PRETTY POST NAVIGATION --- */
+/* --- PRETTY POST NAVIGATION (FIXED) --- */
 
 /* 1. Main navigation container */
 .post_navi {
   display: flex;
-  margin-top: 40px; /* More space above */
-  border-top: 1px solid #e9e9e9; /* A softer separator than a thick <hr> */
-  border-radius: 8px; /* Give the container rounded corners */
-  overflow: hidden; /* Ensures the background color respects the rounded corners */
+  margin-top: 40px;
+  border-top: 1px solid #e9e9e9;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 /* 2. The clickable link items ("Previous" and "Next") */
@@ -60,13 +60,19 @@
   padding: 25px;
   position: relative;
   color: inherit !important;
-  background-color: #fcfcfc; /* A very light background color */
-  transition: background-color 0.3s ease; /* Smooth transition for hover */
+  background-color: #fcfcfc;
+  transition: background-color 0.3s ease;
 }
 
-/* Add a subtle separator between the two items */
+/* Add padding to push text away from the absolute-positioned arrows */
 .post_navi .nav_prev {
   border-right: 1px solid #e9e9e9;
+  padding-left: 60px; /* Space for the left arrow */
+  text-align: left; /* Explicitly set text alignment */
+}
+.post_navi .nav_next {
+  padding-right: 60px; /* Space for the right arrow */
+  text-align: right; /* Explicitly set text alignment */
 }
 
 /* 3. Make the items change color on hover for feedback */
@@ -78,7 +84,7 @@
 .post_navi-label {
   font-size: 0.7rem;
   font-weight: 600;
-  text-transform: uppercase; /* A modern touch */
+  text-transform: uppercase;
   letter-spacing: 0.5px;
   color: #888;
 }
@@ -90,7 +96,7 @@
   transform: translateY(-50%);
   font-size: 2em;
   color: #ccc;
-  transition: transform 0.3s ease, color 0.3s ease; /* Animate the arrow's movement and color */
+  transition: transform 0.3s ease, color 0.3s ease;
 }
 
 .post_navi .nav_prev .post_navi-arrow {
@@ -103,18 +109,18 @@
 
 /* 6. The interactive arrow animation on hover */
 .post_navi .post_navi-item:hover .post_navi-arrow {
-  color: #333; /* Make the arrow darker on hover */
+  color: #333;
 }
 
 .post_navi .nav_prev:hover .post_navi-arrow {
-  transform: translateY(-50%) translateX(-5px); /* Move arrow left */
+  transform: translateY(-50%) translateX(-5px);
 }
 
 .post_navi .nav_next:hover .post_navi-arrow {
-  transform: translateY(-50%) translateX(5px); /* Move arrow right */
+  transform: translateY(-50%) translateX(5px);
 }
 
 /* Hide the harsh default horizontal rule */
 hr {
   display: none;
-}
+} 
