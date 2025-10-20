@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Efficient fine-tuning methods for large language model"
-author: "Letian Shi, Keyan Shi"
+# author: "Letian Shi, Keyan Shi"
 ---
 
 # Efficient Fine-tuning Methods for Large Language Model
